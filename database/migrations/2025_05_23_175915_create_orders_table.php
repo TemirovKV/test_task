@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 			$table->foreignId('user_id')->constrained('users');
 			$table->foreignId('product_id')->constrained('products');
+			$table->integer('quantity');
 			$table->enum('payment_status', ['for payment', 'paid', 'cancelled']);
 			$table->foreignId('payment_method_id')->constrained('payment_methods');
             $table->timestamps();
