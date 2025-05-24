@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddCartItemRequest;
 use App\Models\Cart;
 
 class CartController extends Controller
@@ -29,5 +30,23 @@ class CartController extends Controller
 		return response()->json([
 			'data' => $cartProducts,
 		]);
+	}
+
+	public function addItem(AddCartItemRequest $request)
+	{
+		$data = $request->validated();
+
+		$cartItem = Cart::query()
+			->updateOrCreate(
+				[
+					'user_id' => auth()->user()->id,
+					'product_id' => $data['productId'],
+				],
+				[
+					'quantity' => $data['quantity'],
+				]
+			);
+
+		return response()->json($cartItem->toArray());
 	}
 }

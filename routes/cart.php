@@ -8,4 +8,5 @@ Route::group([
 	'middleware' => 'auth:sanctum',
 ], function () {
 	Route::get('/', [CartController::class, 'get']);
+	Route::post('items', [CartController::class, 'addItem']);
 });
