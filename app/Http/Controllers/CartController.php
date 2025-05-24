@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddCartItemRequest;
+use App\Http\Requests\DeleteCartItemRequest;
 use App\Models\Cart;
 
 class CartController extends Controller
@@ -47,6 +48,20 @@ class CartController extends Controller
 				]
 			);
 
-		return response()->json($cartItem->toArray());
+		return response()->json($cartItem->toArray(), 201);
+	}
+
+	public function deleteItem(DeleteCartItemRequest $request)
+	{
+		$data = $request->validated();
+
+		$success = Cart::query()
+			->where('id', $data['itemId'])
+			->delete();
+
+		if (!$success)
+			return response()->json('can\'t delete cart item', 400);
+
+		return response(null, 204);
 	}
 }

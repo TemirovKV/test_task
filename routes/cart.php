@@ -9,4 +9,5 @@ Route::group([
 ], function () {
 	Route::get('/', [CartController::class, 'get']);
 	Route::post('items', [CartController::class, 'addItem']);
+	Route::delete('items/{itemId}', [CartController::class, 'deleteItem']);
 });
