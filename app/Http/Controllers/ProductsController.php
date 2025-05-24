@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetProductRequest;
 use App\Http\Requests\GetProductsListRequest;
 use App\Models\Product;
 
@@ -19,6 +20,21 @@ class ProductsController extends Controller
 
 		return response()->json([
 			'data' => $products,
+		]);
+	}
+
+	public function get(GetProductRequest $request)
+	{
+		$requestData = $request->validated();
+
+		$product = Product::query()
+			->select('id', 'title', 'price')
+			->where('id', $requestData['productId'])
+			->first()
+			->toArray();
+
+		return response()->json([
+			'data' => $product,
 		]);
 	}
 }
