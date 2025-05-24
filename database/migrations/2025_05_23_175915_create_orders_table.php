@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 			$table->foreignId('user_id')->constrained('users');
 			$table->enum('payment_status', ['for payment', 'paid', 'cancelled']);
-			$table->foreignId('payment_method_id')->constrained('payment_methods');
+			$table->foreignId('payment_method_id')->constrained('payment_methods')->nullable();
             $table->timestamps();
         });
     }
