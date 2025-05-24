@@ -14,7 +14,7 @@ class DeleteCartItemRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'itemId' => 'required|integer|exists:carts,id',
+			'itemId' => 'required|integer|exists:cart_items,id',
 		];
 	}
 

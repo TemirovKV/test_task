@@ -4,32 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddCartItemRequest;
 use App\Http\Requests\DeleteCartItemRequest;
-use App\Models\Cart;
+use App\Models\CartItem;
 
 class CartController extends Controller
 {
-	public function get()
+	public function getItems()
 	{
-		$cartProducts = Cart::query()
+		$cartItems = CartItem::query()
 			->select(
-				'carts.id',
-				'carts.product_id',
-				'carts.quantity'
+				'cart_items.id',
+				'cart_items.product_id',
+				'cart_items.quantity'
 			)
 			->with('products')
 			->where('user_id', auth()->user()->id)
 			->get()
 			->toArray();
 
-		foreach ($cartProducts as &$product)
+		foreach ($cartItems as &$item)
 		{
-			$product['title'] = $product['products']['title'];
-			$product['price'] = $product['products']['price'];
-			unset($product['products']);
+			$item['title'] = $item['products']['title'];
+			$item['price'] = $item['products']['price'];
+			unset($item['products']);
 		}
 
 		return response()->json([
-			'data' => $cartProducts,
+			'data' => $cartItems,
 		]);
 	}
 
@@ -37,7 +37,7 @@ class CartController extends Controller
 	{
 		$data = $request->validated();
 
-		$cartItem = Cart::query()
+		$cartItem = CartItem::query()
 			->updateOrCreate(
 				[
 					'user_id' => auth()->user()->id,
@@ -55,8 +55,11 @@ class CartController extends Controller
 	{
 		$data = $request->validated();
 
-		$success = Cart::query()
-			->where('id', $data['itemId'])
+		$success = CartItem::query()
+			->where([
+				['id', '=', $data['itemId']],
+				['user_id', '=', auth()->user()->id],
+			])
 			->delete();
 
 		if (!$success)
