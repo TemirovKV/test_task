@@ -6,12 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+enum OrderStatusEnum: string
+{
+	case ForPayment = 'for payment';
+	case Paid = 'paid';
+	case Cancelled = 'cancelled';
+}
+
 class Order extends Model
 {
 	protected $fillable = [
 		'user_id',
 		'payment_status',
+		'payment_method_id',
 	];
+
+	protected $casts = [
+        'payment_status' => OrderStatusEnum::class,
+    ];
 
 	public function items(): HasMany
 	{

@@ -8,5 +8,6 @@ Route::group([
 	'middleware' => 'auth:sanctum',
 ], function () {
 	Route::get('/', [OrderController::class, 'getList']);
+	Route::post('/', [OrderController::class, 'create']);
 	Route::get('/{orderId}', [OrderController::class, 'get']);
 });

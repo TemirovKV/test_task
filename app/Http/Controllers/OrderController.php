@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\GetOrderRequest;
+use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderStatusEnum;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -35,6 +41,54 @@ class OrderController extends Controller
 		return response()->json([
 			'data' => $orders,
 		]);
+	}
+
+	public function create(CreateOrderRequest $request)
+	{
+		$data = $request->validated();
+
+		DB::beginTransaction();
+		try {
+			$cartItems = CartItem::query()
+				->select(
+					'cart_items.id',
+					'cart_items.product_id',
+					'cart_items.quantity'
+				)
+				->with('products')
+				->where('user_id', auth()->user()->id)
+				->get();
+
+			if ($cartItems->isEmpty())
+				return response()->json(['message' => 'cart is empty'], 400);
+
+			$order = Order::create([
+				'user_id'           => auth()->user()->id,
+				'payment_status'    => OrderStatusEnum::ForPayment,
+				'payment_method_id' => $data['paymentMethodId'],
+			]);
+
+			foreach ($cartItems as $cartItem)
+			{
+				OrderItem::create([
+					'order_id'   => $order->id,
+					'product_id' => $cartItem->product_id,
+					'quantity'   => $cartItem->quantity,
+					'price'      => $cartItem->products->price,
+				]);
+			}
+
+			CartItem::query()
+				->where('user_id', auth()->user()->id)
+				->delete();
+
+		} catch (Exception $e) {
+			DB::rollBack();
+			throw $e;
+		}
+		DB::commit();
+
+		return response()->json(['payment_link' => env('APP_URL') . "/api/orders/{$order->id}/payments/{$data['paymentMethodId']}"]);
 	}
 
 	public function get(GetOrderRequest $request)
