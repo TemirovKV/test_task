@@ -10,4 +10,5 @@ Route::group([
 	Route::get('/', [OrderController::class, 'getList']);
 	Route::post('/', [OrderController::class, 'create']);
 	Route::get('/{orderId}', [OrderController::class, 'get']);
+	Route::post('/{orderId}/payments/{paymentMethodId}', [OrderController::class, 'pay']);
 });

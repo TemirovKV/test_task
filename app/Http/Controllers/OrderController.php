@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\GetOrderRequest;
 use App\Http\Requests\GetOrdersListRequest;
+use App\Http\Requests\PayOrderRequest;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -130,5 +131,27 @@ class OrderController extends Controller
 		unset($order['payment_method_id']);
 
 		return response()->json($order);
+	}
+
+	public function pay(PayOrderRequest $request)
+	{
+		$data = $request->validated();
+
+		$order = Order::query()
+			->where([
+				['user_id', auth()->user()->id],
+				['id', $data['orderId']],
+				['payment_method_id', $data['paymentMethodId']],
+				['payment_status', OrderStatusEnum::ForPayment],
+			])
+			->first();
+
+		if (!$order)
+			return response()->json(['message' => 'can\'t pay order'], 400);
+
+		$order->payment_status = OrderStatusEnum::Paid;
+		$order->save();
+
+		return response()->json(['status' => $order->payment_status]);
 	}
 }
