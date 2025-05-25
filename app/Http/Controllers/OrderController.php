@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\GetOrderRequest;
+use App\Http\Requests\GetOrdersListRequest;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,9 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-	public function getList()
+	public function getList(GetOrdersListRequest $request)
 	{
-		$orders = Order::query()
+		$data = $request->validated();
+
+		$query = Order::query()
 			->select(
 				'orders.id',
 				'orders.payment_status',
@@ -24,7 +27,12 @@ class OrderController extends Controller
 			->whereHas('items.products')
 			->with('items.products', 'paymentMethods')
 			->where('user_id', auth()->user()->id)
-			->get()
+			->orderBy($data['sort'], $data['order']);
+
+		if (isset($data['status']))
+			$query->where('payment_status', $data['status']);
+
+		$orders = $query->get()
 			->toArray();
 
 		foreach ($orders as &$order)
