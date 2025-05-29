@@ -58,7 +58,5 @@ class UserCest
 		$I->seeResponseMatchesJsonType([
 			'auth_token' => 'string',
 		]);
-
-		// dd($response);
 	}
 }
