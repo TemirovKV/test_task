@@ -20,8 +20,11 @@ CREATE TABLE `cart_items` (
   KEY `cart_items_product_id_foreign` (`product_id`),
   CONSTRAINT `cart_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `cart_items_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `cart_items` (`id`, `user_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 11, NULL, NULL),
+(2, 2, 2, 22, NULL, NULL);
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -22,7 +22,8 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'user', 'example@mail.ru', NULL, '$2y$12$CDe0BOlBXIWn2BsJl2Ed9.tcO9MUDKYjRsNSKGONqgfe3TcLH6ipy', NULL, NULL, NULL);
+(1, 'user', 'example@mail.ru', NULL, '$2y$12$CDe0BOlBXIWn2BsJl2Ed9.tcO9MUDKYjRsNSKGONqgfe3TcLH6ipy', NULL, NULL, NULL),
+(2, 'user2', 'user2@mail.ru', NULL, '$2y$12$CDe0BOlBXIWn2BsJl2Ed9.tcO9MUDKYjRsNSKGONqgfe3TcLH6ipy', NULL, NULL, NULL);
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

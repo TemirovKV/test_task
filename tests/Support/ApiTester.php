@@ -23,7 +23,12 @@ class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
 
-    /**
-     * Define custom actions here
+	/**
+     * Авторизация. Вызывает стандартный метод amBearerAuthenticated с переданный токеном.
+     * По умолчанию использует токен для авторизации под пользователем с id=1
      */
+    public function authorize($accessToken='3|45GPI7Ff4c1tgQ57SEX4m1TvJfozM0X6QTrxoioX12dfc5e8')
+    {
+        $this->amBearerAuthenticated($accessToken);
+    }
 }
