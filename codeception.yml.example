@@ -13,6 +13,13 @@ suites:
                   user: ''
                   password: ''
                   dump:
+                      - 'tests/_data/cart_items.sql'
+                      - 'tests/_data/order_items.sql'
+                      - 'tests/_data/orders.sql'
+                      - 'tests/_data/payment_methods.sql'
+                      - 'tests/_data/personal_access_tokens.sql'
+                      - 'tests/_data/products.sql'
+                      - 'tests/_data/users.sql'
                   populate: true
                 - REST:
                     url: # site_url
