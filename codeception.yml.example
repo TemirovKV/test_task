@@ -1,0 +1,31 @@
+namespace: Tests
+support_namespace: Support
+# suite config
+suites:
+    Api:
+        actor: ApiTester
+        path: .
+        modules:
+            enabled:
+                - Asserts
+                - Db:
+                  dsn: 'mysql:host=;dbname='
+                  user: ''
+                  password: ''
+                  dump:
+                  populate: true
+                - REST:
+                    url: # site_url
+                    depends: PhpBrowser
+        step_decorators:
+            - \Codeception\Step\AsJson
+
+paths:
+    tests: tests/Api
+    output: tests/_output
+    data: tests/_data
+    support: tests/Support
+
+settings:
+    shuffle: false
+    lint: true
